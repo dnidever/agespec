@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Doppler &#8212; doppler v1.0.0</title>
+    <link rel="stylesheet" href="_static/doppler.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="install.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="#"><span id="logotext1"> </span><span id="logotext2">Doppler</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="install.html" title="Installation">
+	  next &raquo;
+	</a>
+      </li>
+      <li>
+	<a href="#">doppler v1.0.0</a>
+	 &#187;
+      </li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="doppler">
+<h1>Doppler<a class="headerlink" href="#doppler" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><em>Doppler</em> <a class="footnote-reference brackets" href="#f1" id="id1">1</a> is a general-purpose stellar radial velocity determination software.  It uses a forward-modeling approach, convolving a
+model spectrum to the resolution or Line Spred Function (LSF) of the observed spectrum.  <em>Doppler</em> can be used with a high-resolution
+model of the <a class="reference external" href="https://github.com/andycasey/AnniesLasso">The Cannon</a> (<a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2016arXiv160303040C/abstract">Casey et al. (2016)</a>)
+and also of <a class="reference external" href="https://github.com/tingyuansen/The_Payne">The Payne</a> (<a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2019ApJ...879...69T/abstract">Ting et al. (2019)</a>),
+both machine-learning approaches to modeling stellar spectra.
+Doppler can determine the radial velocity (RV) and stellar parameters
+for a spectrum of any wavelength (3000-18000A) and resolution (R&lt;20,000 at the blue end and 120,000 at the red end) with minimal setup.</p>
+<p>The current set of three Cannon models cover temperatures of 3,500K to 60,000K with 3-parameter (Teff, logg, [Fe/H]) and radial velocity.
+The current Payne model covers temperatures of 3,500K to 6,000K with 33 labels (Teff, logg, Vmicro, [C/H], [N/H], [O/H], [Na/H], [Mg/H], [Al/H],
+[Si/H], [P/H], [S/H], [K/H], [Ca/H], [Ti/H], [V/H], [Cr/H], [Mn/H], [Fe/H], [Co/H], [Ni/H], [Cu/H], [Ni/H], [Cu/H], [Ge/H], [Ce/H],
+[Nd/H], [Ba/H], [Eu/H], [La/H], [Y/H], [Sc/H], [Zr/H], [Pr/H], [Yb/H]) as well as radial velocity, rotational velocity and macrotubulence.</p>
+<p><em>Doppler</em> also has the ability to simultaneously fit (“jointfit”) multiple spectra of a star, with a single set of stellar parameters and elemental
+abundances and separate radial velocities for each spectrum.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p><em>Doppler</em> fits spectra using a multi-step approach to zero-in on the best solution.</p>
+<p>The default, multi-step approach using the Cannon is:</p>
+<ol class="arabic simple">
+<li><p>Get initial RV using cross-correlation with rough sampling of Teff/logg/[Fe/H] parameter space.</p></li>
+<li><p>Get improved Cannon stellar parameters using initial RV.</p></li>
+<li><p>Improved RV using better Cannon template.</p></li>
+<li><p>Improved Cannon stellar parameters.</p></li>
+<li><p>Full least-squares fitting of all stellar parameters and RV.</p></li>
+<li><p>Run fine-grid in RV using template from previous step</p></li>
+<li><p>Run MCMC (if requested).</p></li>
+</ol>
+<p>The approach with the Payne is:</p>
+<ol class="arabic simple">
+<li><p>Get initial RV using cross-correlation with rough sampling of Teff/logg/[Fe/H]/[alpha/Fe] parameter space.</p></li>
+<li><p>Least-squares fitting of all desired Payne labels and RV, using best-fit of previous step as initial guess.</p></li>
+<li><p>Run fine-grid in RV using best-fit template from previous step.</p></li>
+<li><p>Run MCMC (if requested).</p></li>
+</ol>
+<p>When jointfit is used,</p>
+<ol class="arabic simple">
+<li><p>Run regular <em>Doppler</em> fit on each spectrum separately.</p></li>
+<li><p>Find weighted mean of all labels and Vhelio.</p></li>
+<li><p>Fit all spectra simultaneously determining one set of labels and a separate RV for each spectrum.</p></li>
+</ol>
+<p><em>Doppler</em> can be called from python directly or the command-line script <code class="docutils literal notranslate"><span class="pre">doppler</span></code> can be used.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>Doppler<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Here are the various input arguments for command-line script <code class="docutils literal notranslate"><span class="pre">doppler</span></code>:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">doppler</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="n">OUTFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">payne</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">fitpars</span> <span class="n">FITPARS</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">fixpars</span> <span class="n">FIXPARS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">figfile</span> <span class="n">FIGFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="n">OUTDIR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">l</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">j</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">snrcut</span> <span class="n">SNRCUT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span> <span class="n">READER</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">-</span><span class="n">nth</span> <span class="n">NTHREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">notweak</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tpoly</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tpolyorder</span> <span class="n">TPOLYORDER</span><span class="p">]</span>
+               <span class="n">files</span> <span class="p">[</span><span class="n">files</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="n">Run</span> <span class="n">Doppler</span> <span class="n">fitting</span> <span class="n">on</span> <span class="n">spectra</span>
+
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">files</span>                 <span class="n">Spectrum</span> <span class="n">FITS</span> <span class="n">files</span> <span class="ow">or</span> <span class="nb">list</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">outfile</span> <span class="n">OUTFILE</span>     <span class="n">Output</span> <span class="n">filename</span>
+  <span class="o">--</span><span class="n">payne</span>               <span class="n">Fit</span> <span class="n">a</span> <span class="n">Payne</span> <span class="n">model</span>
+  <span class="o">--</span><span class="n">fitpars</span> <span class="n">FITPARS</span>     <span class="n">Payne</span> <span class="n">labels</span> <span class="n">to</span> <span class="n">fit</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">TEFF</span><span class="p">,</span><span class="n">LOGG</span><span class="p">,</span><span class="n">FE_H</span>
+  <span class="o">--</span><span class="n">fixpars</span> <span class="n">FIXPARS</span>     <span class="n">Payne</span> <span class="n">labels</span> <span class="n">to</span> <span class="n">hold</span> <span class="n">fixed</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">TEFF</span><span class="p">:</span><span class="mi">5500</span><span class="p">,</span><span class="n">LOGG</span><span class="p">:</span><span class="mf">2.3</span>
+  <span class="o">--</span><span class="n">figfile</span> <span class="n">FIGFILE</span>     <span class="n">Figure</span> <span class="n">filename</span>
+  <span class="o">-</span><span class="n">d</span> <span class="n">OUTDIR</span><span class="p">,</span> <span class="o">--</span><span class="n">outdir</span> <span class="n">OUTDIR</span>
+                        <span class="n">Output</span> <span class="n">directory</span>
+  <span class="o">-</span><span class="n">l</span><span class="p">,</span> <span class="o">--</span><span class="nb">list</span>            <span class="n">Input</span> <span class="ow">is</span> <span class="n">a</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">FITS</span> <span class="n">files</span>
+  <span class="o">-</span><span class="n">j</span><span class="p">,</span> <span class="o">--</span><span class="n">joint</span>           <span class="n">Joint</span> <span class="n">fit</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">spectra</span>
+  <span class="o">--</span><span class="n">snrcut</span> <span class="n">SNRCUT</span>       <span class="n">S</span><span class="o">/</span><span class="n">N</span> <span class="n">threshold</span> <span class="n">to</span> <span class="n">fit</span> <span class="n">spectrum</span> <span class="n">separately</span>
+  <span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="o">--</span><span class="n">plot</span>            <span class="n">Save</span> <span class="n">the</span> <span class="n">plots</span>
+  <span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="o">--</span><span class="n">corner</span>          <span class="n">Make</span> <span class="n">corner</span> <span class="n">plot</span> <span class="k">with</span> <span class="n">MCMC</span> <span class="n">results</span>
+  <span class="o">-</span><span class="n">m</span><span class="p">,</span> <span class="o">--</span><span class="n">mcmc</span>            <span class="n">Run</span> <span class="n">MCMC</span> <span class="n">when</span> <span class="n">fitting</span> <span class="n">spectra</span> <span class="n">individually</span>
+  <span class="o">-</span><span class="n">r</span> <span class="n">READER</span><span class="p">,</span> <span class="o">--</span><span class="n">reader</span> <span class="n">READER</span>
+                        <span class="n">The</span> <span class="n">spectral</span> <span class="n">reader</span> <span class="n">to</span> <span class="n">use</span>
+  <span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbose</span>         <span class="n">Verbose</span> <span class="n">output</span>
+  <span class="o">-</span><span class="n">nth</span> <span class="n">NTHREADS</span><span class="p">,</span> <span class="o">--</span><span class="n">nthreads</span> <span class="n">NTHREADS</span>
+                        <span class="n">Number</span> <span class="n">of</span> <span class="n">threads</span> <span class="n">to</span> <span class="n">use</span>
+  <span class="o">--</span><span class="n">notweak</span>             <span class="n">Do</span> <span class="ow">not</span> <span class="n">tweak</span> <span class="n">the</span> <span class="n">continuum</span> <span class="n">using</span> <span class="n">the</span> <span class="n">model</span>
+  <span class="o">--</span><span class="n">tpoly</span>               <span class="n">Use</span> <span class="n">low</span><span class="o">-</span><span class="n">order</span> <span class="n">polynomial</span> <span class="k">for</span> <span class="n">tweaking</span>
+  <span class="o">--</span><span class="n">tpolyorder</span> <span class="n">TPOLYORDER</span>
+                        <span class="n">Polynomial</span> <span class="n">order</span> <span class="n">to</span> <span class="n">use</span> <span class="k">for</span> <span class="n">tweaking</span>
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>For <a class="reference external" href="https://en.wikipedia.org/wiki/Christian_Doppler">Christian Doppler</a> who was an Austrian physicist who discovered the <a class="reference external" href="https://en.wikipedia.org/wiki/Doppler_effect">Doppler effect</a> which is the change in frequency of a wave due to the relative speed of the source and observer.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Doppler</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#id2">Doppler</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="_sources/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, David Nidever.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
+    Last built 06 Jun 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>

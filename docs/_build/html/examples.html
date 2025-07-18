@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Examples &#8212; doppler v1.0.0</title>
+    <link rel="stylesheet" href="_static/doppler.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Getting Started" href="gettingstarted.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="index.html"><span id="logotext1"> </span><span id="logotext2">Doppler</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="gettingstarted.html" title="Getting Started">
+	  &laquo; previous
+	</a>
+	
+      </li>
+      <li>
+	<a href="index.html">doppler v1.0.0</a>
+	 &#187;
+      </li>
+      
+      <li>Examples</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="running-doppler">
+<h2>Running doppler<a class="headerlink" href="#running-doppler" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to run <em>Doppler</em> is with the command-line script <code class="docutils literal notranslate"><span class="pre">doppler</span></code>.  The only required argument is the name of a spectrum fits file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler spectrum.fits
+</pre></div>
+</div>
+<p>This will create an output file called <code class="docutils literal notranslate"><span class="pre">spectrum_doppler.fits</span></code>.</p>
+<p>By default, <em>Doppler</em> doesn’t print anything to the screen.  So let’s set the <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> or <code class="docutils literal notranslate"><span class="pre">-v</span></code> parameter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler spectrum.fits -v
+
+spectrum.fits  S/N<span class="o">=</span>  <span class="m">85</span>.1
+Fitting Cannon model to spectrum with parameters: Teff, logg, <span class="o">[</span>Fe/H<span class="o">]</span>, RV
+Masked <span class="m">103</span> outlier or negative pixels
+TEFF    LOGG     FEH    VREL   CCPEAK    CHISQ
+<span class="m">3500</span>.00   <span class="m">4</span>.80  -0.50  -13.67   <span class="m">0</span>.23   <span class="m">7</span>.87
+<span class="m">4000</span>.00   <span class="m">4</span>.80  -0.50  -15.37   <span class="m">0</span>.39   <span class="m">5</span>.41
+<span class="m">5000</span>.00   <span class="m">4</span>.60  -0.50  -16.56   <span class="m">0</span>.50   <span class="m">3</span>.85
+<span class="m">6000</span>.00   <span class="m">4</span>.40  -0.50  -16.77   <span class="m">0</span>.48   <span class="m">5</span>.16
+<span class="m">7500</span>.00   <span class="m">4</span>.00  -0.50  -16.90   <span class="m">0</span>.16   <span class="m">7</span>.65
+<span class="m">15000</span>.00   <span class="m">4</span>.00  -0.50  <span class="m">989</span>.79   <span class="m">0</span>.03   <span class="m">8</span>.32
+<span class="m">25000</span>.00   <span class="m">4</span>.00  -0.50  -999.68   <span class="m">0</span>.05   <span class="m">8</span>.81
+<span class="m">40000</span>.00   <span class="m">4</span>.00  -0.50  -308.33   <span class="m">0</span>.08   <span class="m">8</span>.96
+<span class="m">3500</span>.00   <span class="m">0</span>.50  -0.50  -15.19   <span class="m">0</span>.34  <span class="m">13</span>.01
+<span class="m">4300</span>.00   <span class="m">1</span>.00  -0.50  -16.22   <span class="m">0</span>.45   <span class="m">6</span>.58
+<span class="m">4700</span>.00   <span class="m">2</span>.00  -0.50  -16.55   <span class="m">0</span>.50   <span class="m">4</span>.68
+<span class="m">5200</span>.00   <span class="m">3</span>.00  -0.50  -16.81   <span class="m">0</span>.50   <span class="m">4</span>.45
+Initial RV fit:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5000</span>.00 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.60
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.50
+<span class="nv">Vrel</span>   <span class="o">=</span>    -16.56 +/-  <span class="m">0</span>.136 km/s
+Initial Cannon stellar parameters using initial RV
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5074</span>.34 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.86
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>      <span class="m">0</span>.10
+Masked <span class="m">48</span> discrepant pixels
+Initial Cannon stellar parameters using initial RV and Tweaking the normalization
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5049</span>.52 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.98
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>      <span class="m">0</span>.14
+Improved RV and Cannon stellar parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5049</span>.52 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.98
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>      <span class="m">0</span>.14
+<span class="nv">Vrel</span>   <span class="o">=</span>    -16.78 +/-  <span class="m">0</span>.117 km/s
+Least Squares RV and stellar parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5049</span>.52 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.98
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>      <span class="m">0</span>.14
+<span class="nv">Vrel</span>   <span class="o">=</span>    -16.78 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">1</span>.96
+Fine grid best <span class="nv">RV</span> <span class="o">=</span> -16.98 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">1</span>.96
+Final parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5049</span>.52 +/-  <span class="m">3</span>.158 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.98 +/-  <span class="m">0</span>.003
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>      <span class="m">0</span>.14 +/-  <span class="m">0</span>.001
+<span class="nv">Vhelio</span> <span class="o">=</span> -18.02 +/-  <span class="m">0</span>.01 km/s
+<span class="nv">BC</span> <span class="o">=</span> -1.04 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">1</span>.96
+<span class="nv">dt</span> <span class="o">=</span>  <span class="m">3</span>.40 sec.
+Writing output to spectrum_doppler.fits
+</pre></div>
+</div>
+<p>You can also have it save a figure of the spectrum and the best-fit model using the <code class="docutils literal notranslate"><span class="pre">--plot</span></code> or <code class="docutils literal notranslate"><span class="pre">-p</span></code> parameter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler spectrum.fits -v -p
+
+spectrum.fits  S/N<span class="o">=</span>  <span class="m">85</span>.1
+Fitting Cannon model to spectrum with parameters: Teff, logg, <span class="o">[</span>Fe/H<span class="o">]</span>, RV
+Masked <span class="m">103</span> outlier or negative pixels
+TEFF    LOGG     FEH    VREL   CCPEAK    CHISQ
+<span class="m">3500</span>.00   <span class="m">4</span>.80  -0.50  -13.67   <span class="m">0</span>.23   <span class="m">7</span>.87
+...
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">1</span>.96
+Figure saved to spectrum_dopfit.png
+<span class="nv">dt</span> <span class="o">=</span>  <span class="m">4</span>.08 sec.
+Writing output to spectrum_doppler.fits
+</pre></div>
+</div>
+<p>By default, the figure filename is <code class="docutils literal notranslate"><span class="pre">spectrum_dopfit.png</span></code>, but the figure filename can be set with the
+<code class="docutils literal notranslate"><span class="pre">--figfile</span></code> parameter.  Note that you can set the figure type with the extension.  For example,
+to get a PDF just use <code class="docutils literal notranslate"><span class="pre">--figfile</span> <span class="pre">spectrum_dopfit.pdf</span></code>.</p>
+<div class="section" id="using-a-payne-model">
+<h3>Using a Payne Model<a class="headerlink" href="#using-a-payne-model" title="Permalink to this headline">¶</a></h3>
+<p>By default, <em>Doppler</em> uses a Cannon model fitting <code class="docutils literal notranslate"><span class="pre">Teff,</span> <span class="pre">logg,</span> <span class="pre">[Fe/H]</span> <span class="pre">and</span> <span class="pre">RV</span></code>.  To use a Payne model instead,
+just set the <code class="docutils literal notranslate"><span class="pre">--payne</span></code> parameter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler spectrum.fits -v --payne
+
+spectrum.fits  S/N<span class="o">=</span>  <span class="m">85</span>.1
+Fitting Payne model to spectrum with parameters: TEFF, LOGG, FE_H, ALPHA_H, RV
+Masked <span class="m">103</span> outlier or negative pixels
+  TEFF    LOGG   FEH   ALPHAFE    VREL  CCPEAK  CHISQ
+   <span class="m">3500</span>   <span class="m">4</span>.80  -1.50   <span class="m">0</span>.00    -13.86   <span class="m">0</span>.13   <span class="m">8</span>.67
+   <span class="m">4000</span>   <span class="m">4</span>.80  -1.50   <span class="m">0</span>.00    -15.52   <span class="m">0</span>.17   <span class="m">8</span>.21
+   <span class="m">5000</span>   <span class="m">4</span>.60  -1.50   <span class="m">0</span>.00    -17.53   <span class="m">0</span>.33   <span class="m">7</span>.89
+   <span class="m">6000</span>   <span class="m">4</span>.40  -1.50   <span class="m">0</span>.00    -17.57   <span class="m">0</span>.28   <span class="m">8</span>.25
+   <span class="m">7500</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.00    -17.97   <span class="m">0</span>.04   <span class="m">8</span>.20
+  <span class="m">15000</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.00    <span class="m">994</span>.28   <span class="m">0</span>.02   <span class="m">8</span>.57
+  <span class="m">25000</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.00  -1004.90   <span class="m">0</span>.01   <span class="m">8</span>.83
+  <span class="m">40000</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.00  -1004.90   <span class="m">0</span>.01   <span class="m">9</span>.08
+   <span class="m">3500</span>   <span class="m">0</span>.50  -1.50   <span class="m">0</span>.00    -14.79   <span class="m">0</span>.25   <span class="m">9</span>.16
+   <span class="m">4300</span>   <span class="m">1</span>.00  -1.50   <span class="m">0</span>.00    -16.82   <span class="m">0</span>.40   <span class="m">6</span>.60
+   <span class="m">4700</span>   <span class="m">2</span>.00  -1.50   <span class="m">0</span>.00    -17.12   <span class="m">0</span>.37   <span class="m">7</span>.29
+   <span class="m">5200</span>   <span class="m">3</span>.00  -1.50   <span class="m">0</span>.00    -17.31   <span class="m">0</span>.33   <span class="m">7</span>.77
+   <span class="m">3500</span>   <span class="m">4</span>.80  -0.50   <span class="m">0</span>.00    -13.67   <span class="m">0</span>.16   <span class="m">7</span>.96
+   <span class="m">4000</span>   <span class="m">4</span>.80  -0.50   <span class="m">0</span>.00    -15.71   <span class="m">0</span>.30   <span class="m">6</span>.23
+   <span class="m">5000</span>   <span class="m">4</span>.60  -0.50   <span class="m">0</span>.00    -16.92   <span class="m">0</span>.45   <span class="m">4</span>.19
+   <span class="m">6000</span>   <span class="m">4</span>.40  -0.50   <span class="m">0</span>.00    -17.03   <span class="m">0</span>.43   <span class="m">6</span>.11
+   <span class="m">7500</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.00    -16.94   <span class="m">0</span>.15   <span class="m">7</span>.54
+  <span class="m">15000</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.00    <span class="m">996</span>.77   <span class="m">0</span>.02   <span class="m">8</span>.60
+  <span class="m">25000</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.00  -1004.90   <span class="m">0</span>.01   <span class="m">8</span>.85
+  <span class="m">40000</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.00  -1004.90   <span class="m">0</span>.01   <span class="m">9</span>.08
+   <span class="m">3500</span>   <span class="m">0</span>.50  -0.50   <span class="m">0</span>.00    -15.56   <span class="m">0</span>.30  <span class="m">12</span>.90
+   <span class="m">4300</span>   <span class="m">1</span>.00  -0.50   <span class="m">0</span>.00    -16.60   <span class="m">0</span>.43   <span class="m">6</span>.51
+   <span class="m">4700</span>   <span class="m">2</span>.00  -0.50   <span class="m">0</span>.00    -16.81   <span class="m">0</span>.46   <span class="m">4</span>.95
+   <span class="m">5200</span>   <span class="m">3</span>.00  -0.50   <span class="m">0</span>.00    -16.99   <span class="m">0</span>.45   <span class="m">5</span>.27
+   <span class="m">3500</span>   <span class="m">4</span>.80  -1.50   <span class="m">0</span>.30    -13.75   <span class="m">0</span>.11   <span class="m">8</span>.59
+   <span class="m">4000</span>   <span class="m">4</span>.80  -1.50   <span class="m">0</span>.30    -16.02   <span class="m">0</span>.20   <span class="m">8</span>.17
+   <span class="m">5000</span>   <span class="m">4</span>.60  -1.50   <span class="m">0</span>.30    -17.21   <span class="m">0</span>.32   <span class="m">7</span>.58
+   <span class="m">6000</span>   <span class="m">4</span>.40  -1.50   <span class="m">0</span>.30    -17.37   <span class="m">0</span>.28   <span class="m">8</span>.06
+   <span class="m">7500</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.30    -17.60   <span class="m">0</span>.05   <span class="m">8</span>.14
+  <span class="m">15000</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.30    <span class="m">994</span>.34   <span class="m">0</span>.02   <span class="m">8</span>.57
+  <span class="m">25000</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.30  -1004.90   <span class="m">0</span>.01   <span class="m">8</span>.83
+  <span class="m">40000</span>   <span class="m">4</span>.00  -1.50   <span class="m">0</span>.30  -1004.90   <span class="m">0</span>.01   <span class="m">9</span>.08
+   <span class="m">3500</span>   <span class="m">0</span>.50  -1.50   <span class="m">0</span>.30    -14.96   <span class="m">0</span>.27   <span class="m">8</span>.73
+   <span class="m">4300</span>   <span class="m">1</span>.00  -1.50   <span class="m">0</span>.30    -16.75   <span class="m">0</span>.40   <span class="m">6</span>.43
+   <span class="m">4700</span>   <span class="m">2</span>.00  -1.50   <span class="m">0</span>.30    -17.03   <span class="m">0</span>.37   <span class="m">7</span>.13
+   <span class="m">5200</span>   <span class="m">3</span>.00  -1.50   <span class="m">0</span>.30    -17.19   <span class="m">0</span>.33   <span class="m">7</span>.60
+   <span class="m">3500</span>   <span class="m">4</span>.80  -0.50   <span class="m">0</span>.30    -13.92   <span class="m">0</span>.18   <span class="m">7</span>.74
+   <span class="m">4000</span>   <span class="m">4</span>.80  -0.50   <span class="m">0</span>.30    -15.63   <span class="m">0</span>.32   <span class="m">5</span>.93
+   <span class="m">5000</span>   <span class="m">4</span>.60  -0.50   <span class="m">0</span>.30    -16.78   <span class="m">0</span>.43   <span class="m">3</span>.98
+   <span class="m">6000</span>   <span class="m">4</span>.40  -0.50   <span class="m">0</span>.30    -16.96   <span class="m">0</span>.41   <span class="m">5</span>.84
+   <span class="m">7500</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.30    -16.88   <span class="m">0</span>.16   <span class="m">7</span>.45
+  <span class="m">15000</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.30    <span class="m">997</span>.53   <span class="m">0</span>.02   <span class="m">8</span>.59
+  <span class="m">25000</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.30  -1004.90   <span class="m">0</span>.01   <span class="m">8</span>.85
+  <span class="m">40000</span>   <span class="m">4</span>.00  -0.50   <span class="m">0</span>.30   -998.83   <span class="m">0</span>.01   <span class="m">9</span>.08
+   <span class="m">3500</span>   <span class="m">0</span>.50  -0.50   <span class="m">0</span>.30    -15.62   <span class="m">0</span>.31  <span class="m">12</span>.53
+   <span class="m">4300</span>   <span class="m">1</span>.00  -0.50   <span class="m">0</span>.30    -16.51   <span class="m">0</span>.42   <span class="m">6</span>.98
+   <span class="m">4700</span>   <span class="m">2</span>.00  -0.50   <span class="m">0</span>.30    -16.74   <span class="m">0</span>.45   <span class="m">4</span>.99
+   <span class="m">5200</span>   <span class="m">3</span>.00  -0.50   <span class="m">0</span>.30    -16.93   <span class="m">0</span>.45   <span class="m">5</span>.05
+Initial RV fit:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">5000</span>.00 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">4</span>.60
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.50
+<span class="o">[</span>alpha/Fe<span class="o">]</span> <span class="o">=</span>      <span class="m">0</span>.30
+<span class="nv">Vrel</span>   <span class="o">=</span>    -16.78 +/-  <span class="m">0</span>.093 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">3</span>.98
+Least Squares RV and stellar parameters:
+<span class="nv">TEFF</span>   <span class="o">=</span>   <span class="m">4828</span>.16
+<span class="nv">LOGG</span>   <span class="o">=</span>      <span class="m">4</span>.68
+<span class="nv">FE_H</span>   <span class="o">=</span>     -0.03
+<span class="nv">ALPHA_H</span> <span class="o">=</span>     -0.23
+<span class="nv">RV</span>     <span class="o">=</span>    -17.05
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.15
+Fine grid best <span class="nv">RV</span> <span class="o">=</span> -17.08 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.15
+Final parameters:
+<span class="nv">TEFF</span>   <span class="o">=</span>   <span class="m">4828</span>.16 +/- <span class="m">12</span>.276
+<span class="nv">LOGG</span>   <span class="o">=</span>      <span class="m">4</span>.68 +/-  <span class="m">0</span>.016
+<span class="nv">FE_H</span>   <span class="o">=</span>     -0.03 +/-  <span class="m">0</span>.005
+<span class="nv">ALPHA_H</span> <span class="o">=</span>     -0.23 +/-  <span class="m">0</span>.008
+<span class="nv">RV</span>     <span class="o">=</span>    -17.08 +/-  <span class="m">0</span>.045
+<span class="nv">Vhelio</span> <span class="o">=</span> -18.12 +/-  <span class="m">0</span>.04 km/s
+<span class="nv">BC</span> <span class="o">=</span> -1.04 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.15
+<span class="nv">dt</span> <span class="o">=</span> <span class="m">11</span>.10 sec.
+Writing output to spectrum_doppler.fits
+</pre></div>
+</div>
+<p>By default, <em>Doppler</em> fits the parameters <code class="docutils literal notranslate"><span class="pre">Teff,</span> <span class="pre">logg,</span> <span class="pre">[Fe/H],</span> <span class="pre">[alpha/H],</span> <span class="pre">and</span> <span class="pre">RV</span></code> with a Payne model.
+But the parameters can be set using the <code class="docutils literal notranslate"><span class="pre">--fitpars</span></code> parameter with a comma-separated list of parameter
+names (with no spaces).  Note that all abundance names need to end with <code class="docutils literal notranslate"><span class="pre">_h</span></code> such as <code class="docutils literal notranslate"><span class="pre">fe_h</span></code>,
+<code class="docutils literal notranslate"><span class="pre">alpha_h</span></code> and <code class="docutils literal notranslate"><span class="pre">c_h</span></code>.  To fit the carbon abundance as well, you would do,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler spectrum.fits -v --payne --fitpars teff,logg,fe_h,alpha_h,c_h,rv
+
+spectrum.fits  S/N<span class="o">=</span>  <span class="m">85</span>.1
+Fitting Payne model to spectrum with parameters: TEFF, LOGG, FE_H, ALPHA_H, RV
+Masked <span class="m">103</span> outlier or negative pixels
+  TEFF    LOGG   FEH   ALPHAFE    VREL  CCPEAK  CHISQ
+   <span class="m">3500</span>   <span class="m">4</span>.80  -1.50   <span class="m">0</span>.00    -13.86   <span class="m">0</span>.13   <span class="m">8</span>.67
+...
+Least Squares RV and stellar parameters:
+<span class="nv">TEFF</span>   <span class="o">=</span>   <span class="m">4860</span>.69
+<span class="nv">LOGG</span>   <span class="o">=</span>      <span class="m">4</span>.72
+<span class="nv">FE_H</span>   <span class="o">=</span>     -0.03
+<span class="nv">ALPHA_H</span> <span class="o">=</span>     -0.24
+<span class="nv">C_H</span>    <span class="o">=</span>      <span class="m">0</span>.08
+<span class="nv">RV</span>     <span class="o">=</span>    -17.03
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.13
+Fine grid best <span class="nv">RV</span> <span class="o">=</span> -17.06 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.13
+Final parameters:
+<span class="nv">TEFF</span>   <span class="o">=</span>   <span class="m">4860</span>.69 +/- <span class="m">16</span>.727
+<span class="nv">LOGG</span>   <span class="o">=</span>      <span class="m">4</span>.72 +/-  <span class="m">0</span>.019
+<span class="nv">FE_H</span>   <span class="o">=</span>     -0.03 +/-  <span class="m">0</span>.007
+<span class="nv">ALPHA_H</span> <span class="o">=</span>     -0.24 +/-  <span class="m">0</span>.010
+<span class="nv">C_H</span>    <span class="o">=</span>      <span class="m">0</span>.08 +/-  <span class="m">0</span>.010
+<span class="nv">RV</span>     <span class="o">=</span>    -17.06 +/-  <span class="m">0</span>.045
+<span class="nv">Vhelio</span> <span class="o">=</span> -18.10 +/-  <span class="m">0</span>.05 km/s
+<span class="nv">BC</span> <span class="o">=</span> -1.04 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.13
+<span class="nv">dt</span> <span class="o">=</span> <span class="m">11</span>.00 sec.
+</pre></div>
+</div>
+<p>The current Payne model has 33 labels (Teff, logg, Vmicro, [C/H], [N/H], [O/H], [Na/H], [Mg/H], [Al/H], [Si/H], [P/H], [S/H],
+[K/H], [Ca/H], [Ti/H], [V/H], [Cr/H], [Mn/H], [Fe/H], [Co/H], [Ni/H], [Cu/H], [Ni/H], [Cu/H], [Ge/H], [Ce/H], [Nd/H], [Ba/H],
+[Eu/H], [La/H], [Y/H], [Sc/H], [Zr/H], [Pr/H], [Yb/H]).  Besides RV, Vsini and Vmacro can also be fit with a Payne model.</p>
+</div>
+<div class="section" id="jointly-fitting-spectra">
+<h3>Jointly fitting spectra<a class="headerlink" href="#jointly-fitting-spectra" title="Permalink to this headline">¶</a></h3>
+<p><em>Doppler</em> can fit mulitple spectra of the same star simultaneously.  It will fit a single set of labels and separate
+RVs for each spectrum.  To use this option, set the <code class="docutils literal notranslate"><span class="pre">--joint</span></code> or <code class="docutils literal notranslate"><span class="pre">j</span></code> parameters.  You also need to give the
+names of the mulitiple spectrum files.  You can give these on the command list, e.g. <code class="docutils literal notranslate"><span class="pre">doppler</span> <span class="pre">spectrum1.fits</span> <span class="pre">spectrum2.fits</span> <span class="pre">-j</span></code>,
+or you can put the names of the files in an ASCII list file (one per line) and give that to <em>Doppler</em>.  To use a list, be sure
+to also set the <code class="docutils literal notranslate"><span class="pre">--list</span></code> or <code class="docutils literal notranslate"><span class="pre">-l</span></code> parameter.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler speclist.txt -v -j -l
+
+--- Running Doppler Jointfit on <span class="m">3</span> spectra ---
+
+Loading the spectra
+Spectrum   <span class="m">1</span>:  apVisit-r13-9289-58006-107.fits  S/N<span class="o">=</span> <span class="m">102</span>.4
+Spectrum   <span class="m">2</span>:  apVisit-r13-9289-58028-113.fits  S/N<span class="o">=</span>  <span class="m">74</span>.5
+Spectrum   <span class="m">3</span>:  apVisit-r13-9289-58054-107.fits  S/N<span class="o">=</span>  <span class="m">72</span>.4
+
+Jointly fitting Cannon model to <span class="m">3</span> spectra with parameters: Teff, logg, <span class="o">[</span>Fe/H<span class="o">]</span> and RV <span class="k">for</span> each spectrum
+Step <span class="c1">#1: Fitting the individual spectra</span>
+Fitting spectrum <span class="m">1</span>
+apVisit-r13-9289-58006-107.fits
+Fitting Cannon model to spectrum with parameters: Teff, logg, <span class="o">[</span>Fe/H<span class="o">]</span>, RV
+...
+Final parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">4658</span>.20 +/-  <span class="m">1</span>.463 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">2</span>.62 +/-  <span class="m">0</span>.002
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.16 +/-  <span class="m">0</span>.001
+<span class="nv">Vhelio</span> <span class="o">=</span> -82.05 +/-  <span class="m">0</span>.01 km/s
+<span class="nv">BC</span> <span class="o">=</span> <span class="m">14</span>.38 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">2</span>.26
+<span class="nv">dt</span> <span class="o">=</span>  <span class="m">4</span>.16 sec.
+
+Fitting spectrum <span class="m">2</span>
+apVisit-r13-9289-58028-113.fits
+Fitting Cannon model to spectrum with parameters: Teff, logg, <span class="o">[</span>Fe/H<span class="o">]</span>, RV
+...
+Final parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">4666</span>.10 +/-  <span class="m">1</span>.498 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">2</span>.56 +/-  <span class="m">0</span>.002
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.15 +/-  <span class="m">0</span>.001
+<span class="nv">Vhelio</span> <span class="o">=</span> -82.03 +/-  <span class="m">0</span>.01 km/s
+<span class="nv">BC</span> <span class="o">=</span>  <span class="m">8</span>.07 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">1</span>.88
+<span class="nv">dt</span> <span class="o">=</span>  <span class="m">3</span>.37 sec.
+
+Fitting spectrum <span class="m">3</span>
+apVisit-r13-9289-58054-107.fits
+Fitting Cannon model to spectrum with parameters: Teff, logg, <span class="o">[</span>Fe/H<span class="o">]</span>, RV
+...
+Final parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">4657</span>.61 +/-  <span class="m">1</span>.624 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">2</span>.59 +/-  <span class="m">0</span>.002
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.16 +/-  <span class="m">0</span>.001
+<span class="nv">Vhelio</span> <span class="o">=</span> -82.10 +/-  <span class="m">0</span>.01 km/s
+<span class="nv">BC</span> <span class="o">=</span> -1.02 km/s
+<span class="nv">chisq</span> <span class="o">=</span>  <span class="m">1</span>.70
+<span class="nv">dt</span> <span class="o">=</span>  <span class="m">3</span>.28 sec.
+
+Step <span class="c1">#2: Getting weighted stellar parameters</span>
+Initial weighted parameters are:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">4660</span>.75 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">2</span>.59
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.16
+<span class="nv">Vrel</span>   <span class="o">=</span>    -82.06 km/s
+
+Step <span class="c1">#3: Fitting all spectra simultaneously</span>
+Parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">4660</span>.97 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">2</span>.59
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.16
+<span class="nv">Vhelio</span> <span class="o">=</span> -82.05 +/-  <span class="m">0</span>.01 km/s
+<span class="nv">Vscatter</span> <span class="o">=</span>   <span class="m">0</span>.017 km/s
+<span class="o">[</span>-82.04650497 -82.03479767 -82.10112727<span class="o">]</span>
+
+Step <span class="c1">#4: Tweaking continuum and masking outliers</span>
+Masked <span class="m">4</span> discrepant pixels
+Masked <span class="m">3</span> discrepant pixels
+Masked <span class="m">1</span> discrepant pixels
+
+Step <span class="c1">#5: Re-fitting all spectra simultaneously</span>
+Final parameters:
+<span class="nv">Teff</span>   <span class="o">=</span>   <span class="m">4661</span>.19 K
+<span class="nv">logg</span>   <span class="o">=</span>      <span class="m">2</span>.59
+<span class="o">[</span>Fe/H<span class="o">]</span> <span class="o">=</span>     -0.16
+<span class="nv">Vhelio</span> <span class="o">=</span> -82.05 +/-  <span class="m">0</span>.01 km/s
+<span class="nv">Vscatter</span> <span class="o">=</span>   <span class="m">0</span>.017 km/s
+<span class="o">[</span>-82.04650497 -82.03479767 -82.10112727<span class="o">]</span>
+<span class="nv">dt</span> <span class="o">=</span> <span class="m">13</span>.05 sec.
+Writing output to apVisit-r13-9289-58006-107_doppler.fits
+</pre></div>
+</div>
+<p><em>Doppler</em> first fits each spectrum separately.  Then it finds weighted stellar parameters and Vhelio.  Finally,
+it fits a single set of stellar parameters and an RV for each spectrum to all spectra simultaneously.</p>
+</div>
+</div>
+<div class="section" id="running-doppler-from-python">
+<h2>Running <em>Doppler</em> from python<a class="headerlink" href="#running-doppler-from-python" title="Permalink to this headline">¶</a></h2>
+<p>All of the <em>Doppler</em> functionality is also available directory from python.</p>
+<p>First, import <em>Doppler</em> and read in the example spectrum.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doppler</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="n">doppler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;spectrum.fits&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Print out it’s properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>spec
+
+&lt;class &#39;doppler.spec1d.Spec1D&#39;&gt;
+APOGEE spectrum
+File = spectrum.fits
+S/N =   85.06
+Dimensions: [2048,3]
+Flux = [[3.6705207e-15 3.8983997e-15 4.8754683e-15]
+ [3.6727666e-15 3.9004448e-15 4.8746174e-15]
+ [3.6702780e-15 3.9016904e-15 4.8737662e-15]
+ ...
+ [4.3078719e-15 4.5482637e-15 5.8845268e-15]
+ [4.3102292e-15 4.5506604e-15 5.8881089e-15]
+ [4.3116611e-15 4.5502703e-15 5.8918320e-15]]
+Err = [[1.5879806e-08 2.8263509e-08 3.4794638e-08]
+ [1.5880362e-08 2.8273581e-08 3.4788567e-08]
+ [1.5881179e-08 2.8282614e-08 3.4782488e-08]
+ ...
+ [2.7037721e-08 3.5628904e-08 3.2013901e-08]
+ [2.7046704e-08 3.5624442e-08 3.2033391e-08]
+ [2.7055689e-08 3.5619223e-08 3.2053357e-08]]
+Wave = [[16953.30940492 16433.71888594 15808.37977415]
+ [16953.09701271 16433.45786229 15808.07341694]
+ [16952.88459753 16433.19681725 15807.76703994]
+ ...
+ [16471.98020599 15856.26367213 15141.55733694]
+ [16471.72234417 15855.96043257 15141.21203183]
+ [16471.46446085 15855.65717311 15140.86670842]]
+</pre></div>
+</div>
+<p>Now fit the spectrum:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">specm</span> <span class="o">=</span> <span class="n">doppler</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be a table with the final results, the best-fitting model spectrum, and the masked and tweaked
+version of the observed spectrum used internall by <em>Doppler</em> for the fitting.</p>
+<p>To jointly fit spectra, you want to load all of the spectra into a list and then run <code class="docutils literal notranslate"><span class="pre">jointfit()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doppler</span>
+<span class="kn">from</span> <span class="nn">dlnpyutils</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">dln</span>
+<span class="c1"># Read in the list of files</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">dln</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="o">.</span><span class="n">txt</span><span class="s1">&#39;)</span>
+<span class="n">speclist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)):</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">doppler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">speclist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<span class="c1"># Now run jointfit()</span>
+<span class="n">sumstr</span><span class="p">,</span><span class="n">final</span><span class="p">,</span><span class="n">bmodel</span><span class="p">,</span><span class="n">specmlist</span> <span class="o">=</span> <span class="n">doppler</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">jointfit_payne</span><span class="p">(</span><span class="n">speclist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The outputs are a summary file of the best-fit values (sumstr), final best-fit values for each individual spectrum (final),
+list of best-fitting model spectra (bmodel), and the list of the masked and tweaked observed spectra (specmlist).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#running-doppler">Running doppler</a><ul>
+<li><a class="reference internal" href="#using-a-payne-model">Using a Payne Model</a></li>
+<li><a class="reference internal" href="#jointly-fitting-spectra">Jointly fitting spectra</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#running-doppler-from-python">Running <em>Doppler</em> from python</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="_sources/examples.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, David Nidever.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
+    Last built 06 Jun 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>

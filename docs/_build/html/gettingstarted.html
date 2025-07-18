@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Getting Started &#8212; doppler v1.0.0</title>
+    <link rel="stylesheet" href="_static/doppler.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="_static/astropy_logo.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Installation" href="install.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="index.html"><span id="logotext1"> </span><span id="logotext2">Doppler</span><span id="logotext3">:docs</span></a>
+  <ul>
+    
+    <li><a class="homelink" title="Astropy Homepage" href="http://www.astropy.org"></a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li class="right">
+	<a href="examples.html" title="Examples">
+	  next &raquo;
+	</a>
+      </li>
+      <li class="right">
+	<a href="install.html" title="Installation">
+	  &laquo; previous
+	</a>
+	 |
+      </li>
+      <li>
+	<a href="index.html">doppler v1.0.0</a>
+	 &#187;
+      </li>
+      
+      <li>Getting Started</li> 
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p><em>Doppler</em> uses Cannon or Payne models to create stellar spectra of various stellar types (e.g, effective temperature, surface gravity and metallicity).
+The Cannon is machine-learning software generally trained on observed stellar spectrum.  I have trained it instead on a large grid of synthetic
+stellar spectra and use it as a quick spectral emulator/interpolator. The Payne is similar to The Cannon but uses an Artificial Neural Network to
+represent the spectra.  The Payne model included in <em>Doppler</em> has 33 labels and was also trained on synthetic spectra.</p>
+<p>The RV and stellar parameter fitting are done iteratively.  First, the stellar parameter space is sparsely sampled and the synthetic spectra
+cross-correlated with the observed spectrum.  Then the best-fitting RV is used to shift the spectrum to it’s rest wavelength scale and the
+Cannon is used to determine the best stellar parameters.  The RV is fit again with this new model and then Cannon is used to update the best
+stellar parameters.  At the end, MCMC (with “emcee”) can be run to determine more accurate uncertainties in the output parameters.
+If procedure is similar but somewhat simplified if the The Payne is used.</p>
+</div>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>This is how you can run <em>Doppler</em> directly from python. Import the package and load your spectrum</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">doppler</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="n">doppler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;spectrum.fits&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now fit the spectrum:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">specm</span> <span class="o">=</span> <span class="n">doppler</span><span class="o">.</span><span class="n">rv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">out</span></code> is a catalog that contains the best-fit parameters, uncertainties, chi-squared and so on. <code class="docutils literal notranslate"><span class="pre">model</span></code> is the best-fitting model spectrum.
+<code class="docutils literal notranslate"><span class="pre">specm</span></code> is the observed spectrum that has been masked and continuum tweaked by <em>Doppler</em> and was used in the fitting.</p>
+</div>
+<div class="section" id="the-spec1d-object">
+<h2>The Spec1D Object<a class="headerlink" href="#the-spec1d-object" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Doppler</em> package represents spectra as Spec1D objects.  The 1D indicates that the spectra are 1-dimensional in the sense that
+they are flux versus wavelength.  The main properties of a Spec1D object are:</p>
+<ul class="simple">
+<li><p><strong>flux</strong> (required): Flux array with dimensions of [Npix] or if multiple orders [Npix,Norder].</p></li>
+<li><p><strong>err</strong> (optional, but highly recommended): Flux uncertainty array (same shape as flux).</p></li>
+<li><p><strong>wave</strong>: Wavelength array (same shape as flux).</p></li>
+<li><p><strong>mask</strong>: Boolean bad pixel mask for each pixel (same shape as flux).</p></li>
+<li><p><strong>bitmask</strong> (optional): Bit-mask giving specific information for each pixel.</p></li>
+<li><p><strong>lsf</strong>: Line Spread Function (LSF) object for this spectrum.</p></li>
+<li><p><strong>filename</strong> (optional): Name of spectrum file.</p></li>
+<li><p><strong>instrument</strong> (optional): Instrument on which the spectrum was observed.</p></li>
+</ul>
+<p>Some important Spec1D methods are:</p>
+<ul class="simple">
+<li><p><strong>normalize()</strong>: Normalize the spectrum.</p></li>
+<li><p><strong>wave2pix()</strong>: Convert wavelengths to pixels (takes <code class="docutils literal notranslate"><span class="pre">order</span></code> keyword).</p></li>
+<li><p><strong>pix2wave()</strong>: Convert pixels to wavelengths (takes <code class="docutils literal notranslate"><span class="pre">order</span></code> keyword).</p></li>
+<li><p><strong>interp()</strong>: Interpolate the spectrum onto a new wavelength scale.</p></li>
+<li><p><strong>copy()</strong>: Make a copy of this spectrum.</p></li>
+<li><p><strong>barycorr()</strong>: Compute the barycentric correction for this spectrum.</p></li>
+</ul>
+<div class="section" id="the-line-spread-function-lsf">
+<h3>The Line Spread Function (LSF)<a class="headerlink" href="#the-line-spread-function-lsf" title="Permalink to this headline">¶</a></h3>
+<p>It’s important to have some information about the spectrum’s Line Spectra Function (LSF) or the width and shape of a spectral line
+as a function of wavelength (or pixel).  This is necessary to properly convolve the Cannon or Payne model spectrum to the observed spectrum.</p>
+<p><em>Doppler</em> has two types of LSF models: <strong>Gaussian</strong> and <strong>Gauss-Hermite</strong>.  The Gauss-Hermite LSF is specifically for APOGEE spectra.  The
+Gaussian LSF type should suffice for most other spectra.</p>
+<p>If you don’t have the LSF information, you can derive it by using comparison or arc-lamp spectra for the same instrumental setup.
+Fit Gaussians to all of the mission lines and then fit the Gaussian sigma as a function of pixel or wavelength.  Make sure that the
+sigma units and X units are the same (e.g., wavelength in Angstroms or pixels).</p>
+<p>The LSF can be easily computed for the entire spectrum by using the <code class="docutils literal notranslate"><span class="pre">array()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lsf</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">lsf</span><span class="o">.</span><span class="n">array</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output will be a 2D array [Npix,Nlsf] if there is only one order, otherwise 3D [Npix,Nlsf,Norder].</p>
+<p>You can obtain the LSF for specific pixels or wavelengths with the <code class="docutils literal notranslate"><span class="pre">anyarray()</span></code> method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lsf</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">lsf</span><span class="o">.</span><span class="n">anyarray</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span><span class="mi">200</span><span class="p">],</span><span class="n">xtype</span><span class="o">=</span><span class="s1">&#39;pixels&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be [Npix,Nlsf].</p>
+<p>The default of <code class="docutils literal notranslate"><span class="pre">anyarray()</span></code> is to put the LSF on the original wavelength scale.  If you want your own new wavelength scale,
+then set <code class="docutils literal notranslate"><span class="pre">original=False</span></code>.</p>
+<p>You can use <code class="docutils literal notranslate"><span class="pre">utils.convolve_sparse()</span></code> to convolve a flux array with an LSF.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">convflux</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">convolve_sparse</span><span class="p">(</span><span class="n">flux</span><span class="p">,</span><span class="n">lsf</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-mask">
+<h3>The Mask<a class="headerlink" href="#the-mask" title="Permalink to this headline">¶</a></h3>
+<p>The Spec1D object uses an internal boolean bad pixel mask called <code class="docutils literal notranslate"><span class="pre">mask</span></code>, where good pixels have <code class="docutils literal notranslate"><span class="pre">False</span></code> and bad pixels <code class="docutils literal notranslate"><span class="pre">True</span></code> values.
+Normally spectra come with bitmasks which give specific information for each pixel, such as “bad pixel”, “saturated”, “bright sky line”, etc.
+But this information is survey or instrument-specific.  Therefore, it is best for each spectral reader (see below) to specify the good
+and bad pixels in <code class="docutils literal notranslate"><span class="pre">mask</span></code>.  It is also good to save the bitmask information (if it exists) in <code class="docutils literal notranslate"><span class="pre">bitmask</span></code>.</p>
+</div>
+<div class="section" id="spectral-orders">
+<h3>Spectral Orders<a class="headerlink" href="#spectral-orders" title="Permalink to this headline">¶</a></h3>
+<p>The <em>Doppler</em> Spec1D objects can represent spectra with multiple “orders”.  For example, an APOGEE visit spectrum has components from three
+detectors that are represented as a [4096,3] array.  The three APOGEE spectral orders are non-overlapping in wavelength, but that might
+not necessarily always be the case.  DESI spectra have components from three spectrograph arms and their spectra overlap.
+<em>Doppler</em> handles both of these situations.</p>
+<p><em>Doppler</em> can handle multi-order spectra, but the order dimension must always be the last/trailing one.  For example, flux dimensions
+of [4096,3] is okay, but [3,4096] is not.</p>
+<p>If the order spectra do not have the same number of pixels (e.g., 1900, 2000, and 2100 pixels for three orders), then the arrays should
+use the largest number of pixels for a given order, say Npix_max (2100 pixels in the example).  For orders that have less pixels than
+this, put the spectrum at the beginning of the array and leave the rest blank but be sure to set the <code class="docutils literal notranslate"><span class="pre">mask</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> for these pixels
+so that they will be ignored by <em>Doppler</em>.  For the first order in the example, fill the first 1900 elements of the 2100 element flux
+array with the spectrum and leave the rest of the pixels at zero.  Then set the last 200 elements of the <code class="docutils literal notranslate"><span class="pre">mask</span></code> array to <code class="docutils literal notranslate"><span class="pre">True</span></code> to mark
+those pixels as bad.</p>
+<p>Most <em>Doppler</em> functions and methods have an <code class="docutils literal notranslate"><span class="pre">order=X</span></code> keyword if a specific order is desired.</p>
+</div>
+<div class="section" id="vacuum-or-air-wavelengths">
+<h3>Vacuum or Air Wavelengths<a class="headerlink" href="#vacuum-or-air-wavelengths" title="Permalink to this headline">¶</a></h3>
+<p>In the past it was the norm to use “air” wavelengths (standard temperature and pressure), but more recently “vacuum” wavelengths are
+becoming more common.  <em>Doppler</em> can handle wavelengths in both vacuum or air and will properly convert between them as long as it knows
+what the observed spectrum uses.  Make sure to set the <code class="docutils literal notranslate"><span class="pre">wavevac</span></code> property is properly set.  <code class="docutils literal notranslate"><span class="pre">True</span></code> for vacuum wavelengths, and <code class="docutils literal notranslate"><span class="pre">False</span></code>
+for air wavelengths.</p>
+</div>
+<div class="section" id="normalization">
+<h3>Normalization<a class="headerlink" href="#normalization" title="Permalink to this headline">¶</a></h3>
+<p><em>Doppler</em> works with continuum normalize spectra and the Spec1D objects have a normalize() method.</p>
+<p>You may choose to normalize your spectrum using a different method.  To do so:</p>
+<ul class="simple">
+<li><p>normalize the ERR array as well the FLUX, i.e. divide both by the continuum</p></li>
+<li><p>save the continuum used in CONT, e.g., <code class="docutils literal notranslate"><span class="pre">spec.cont</span> <span class="pre">=</span> <span class="pre">cont</span></code></p></li>
+<li><p>indicate that the spectrum is normalized by setting <code class="docutils literal notranslate"><span class="pre">spec.normalized</span> <span class="pre">=</span> <span class="pre">True</span></code></p></li>
+</ul>
+<p>Then you can use the rest of the <em>Doppler</em> functions just as if the normalize() method was used.</p>
+<p>Each spectrum reader can also set it’s own function to calculate the continuum which is then used by normalize() for the
+continuum normalization procedure.  This is the preferred way to custom normalization.  See below for more details.</p>
+</div>
+</div>
+<div class="section" id="creating-and-adding-a-custom-reader">
+<h2>Creating and adding a custom reader<a class="headerlink" href="#creating-and-adding-a-custom-reader" title="Permalink to this headline">¶</a></h2>
+<p>The current spectral readers are geared towards SDSS-style spectra, but more will be added in the future and
+it’s easy to create a new custom spectral reader and add it to the list of readers.  Check the various functions
+in reader.py to see examples of how to do it.</p>
+<div class="section" id="here-are-the-basics">
+<h3>Here are the basics:<a class="headerlink" href="#here-are-the-basics" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doppler.spec1d</span> <span class="kn">import</span> <span class="n">Spec1D</span>
+<span class="k">def</span> <span class="nf">myreader</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="c1"># Load the flux and wavelength (maybe from header keywords)</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">Spec1D</span><span class="p">(</span><span class="n">flux</span><span class="p">,</span><span class="n">wave</span><span class="o">=</span><span class="n">wave</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span>
+</pre></div>
+</div>
+<p>If you are going to add LSF information (highly recommended):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doppler.spec1d</span> <span class="kn">import</span> <span class="n">Spec1D</span>
+<span class="k">def</span> <span class="nf">myreader</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="c1"># Load the flux and wavelength information from the file</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">Spec1D</span><span class="p">(</span><span class="n">flux</span><span class="p">,</span><span class="n">wave</span><span class="o">=</span><span class="n">wave</span><span class="p">,</span><span class="n">lsfcoef</span><span class="o">=</span><span class="n">lsfcoef</span><span class="p">,</span><span class="n">lsftype</span><span class="o">=</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span><span class="n">lsfxtype</span><span class="o">=</span><span class="s1">&#39;Wave&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span>
+</pre></div>
+</div>
+<p>If you know the Gaussian sigma as a polynomial function of Wavelength or Pixels, use <code class="docutils literal notranslate"><span class="pre">lsfcoef</span></code>.  For multiple orders, the
+dimensionality of <code class="docutils literal notranslate"><span class="pre">lsfcoef</span></code> should be [Ncoeff, Norder].  The coefficients should be sorted with the highest orders first and
+the constant term last, as is usual in python.  <strong>Note</strong>, if your lsfxtype is “Wave”, then it is assumed that the resulting
+sigmas are also in wavelength units (Angstroms).  If you want to input an array of sigma values per pixel instead, then use <code class="docutils literal notranslate"><span class="pre">lsfsigma</span></code>.</p>
+<p>There is also a “Gauss-Hermite” LSF type, but currently this is only used for APOGEE spectra.</p>
+<p>It’s useful to check at the beginning of your reader that the file/spectrum is of the right type.  If it’s not then just return <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p><em>Doppler</em> can handle wavelengths in both vacuum or air and will properly convert between them as long as it knows what the
+observed spectrum uses.  Make sure to set <code class="docutils literal notranslate"><span class="pre">wavevac</span> <span class="pre">=</span> <span class="pre">True</span></code> for vacuum wavelengths or <code class="docutils literal notranslate"><span class="pre">False</span></code> for air wavelengths.</p>
+<p>Readers can specify a custom continuum function that will be used by the normalize() method for the continuum normalization.  Set the
+Spec1D property <code class="docutils literal notranslate"><span class="pre">continuum_func</span></code> to the function you want to use.  The <code class="docutils literal notranslate"><span class="pre">spec1d</span></code> module has a function called <code class="docutils literal notranslate"><span class="pre">continuum</span></code> that is
+normally used to <em>Doppler</em>.  A simple approach is to just modify the default parameters for <code class="docutils literal notranslate"><span class="pre">continuum</span></code> using the <code class="docutils literal notranslate"><span class="pre">partial</span></code> capability:</p>
+<p>For example,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spec</span><span class="o">.</span><span class="n">continuum_func</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">spec1d</span><span class="o">.</span><span class="n">continuum</span><span class="p">,</span><span class="n">norder</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">perclevel</span><span class="o">=</span><span class="mf">75.0</span><span class="p">,</span>
+                                        <span class="n">binsize</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span><span class="n">interp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>But a completely separate function can also be used.  It just needs to accept a Spec1D object as the first positional argument and
+return the continuum array with the same dimensions as the flux array.</p>
+</div>
+<div class="section" id="using-a-custom-reader">
+<h3>Using a custom reader<a class="headerlink" href="#using-a-custom-reader" title="Permalink to this headline">¶</a></h3>
+<p>If you are using <em>Doppler</em> directly from python, you can add the custrom reader to the list of readers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doppler</span> <span class="kn">import</span> <span class="n">reader</span>
+<span class="kn">from</span> <span class="nn">mymodule</span> <span class="kn">import</span> <span class="n">myreader</span>
+<span class="n">reader</span><span class="o">.</span><span class="n">_readers</span><span class="p">[</span><span class="s1">&#39;myreader&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">myreader</span>
+</pre></div>
+</div>
+<p>Now your reader should work with <code class="docutils literal notranslate"><span class="pre">doppler.read()</span></code>.</p>
+<p>If you are using the <code class="docutils literal notranslate"><span class="pre">doppler</span></code> command-line tool, you can use the custom reader by giving the python script filename in the call.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doppler spectrum1001.fits --reader myreader.py
+</pre></div>
+</div>
+<p>The name of the reader function has to be the same as the reader filename, e.g. myreader() and myreader.py</p>
+</div>
+</div>
+<div class="section" id="modules-and-useful-functions">
+<h2>Modules and useful functions<a class="headerlink" href="#modules-and-useful-functions" title="Permalink to this headline">¶</a></h2>
+<p>There are 7 main modules:</p>
+<ul class="simple">
+<li><p>rv: This module has RV-related functions:
+- fit(): Fit a Cannon model to a spectrum
+- ccorrelate(): cross-correlate two flux arrays.
+- normspec(): Normalize a spectrum.  Spec1D objects use this for their normalize() method.</p></li>
+<li><p>cannon: This module has functions for working with Cannon models:
+- model_spectrum(): Generate a stellar spectrum for specific stellar parameters and radial velocity from a Cannon model.
+- prepare_cannon_model(): Prepare a Cannon model (or list of them) for a specific spectrum.</p></li>
+<li><p>payne: This jmodule has function working with Payne models:</p></li>
+<li><p>spec1d: Contains the Spec1D class and methods.</p></li>
+<li><p>lsf: Contains the Lsf classes and methods.</p></li>
+<li><p>utils: Various utlity functions.</p></li>
+<li><p>reader: Contains the spectrum readers.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#the-spec1d-object">The Spec1D Object</a><ul>
+<li><a class="reference internal" href="#the-line-spread-function-lsf">The Line Spread Function (LSF)</a></li>
+<li><a class="reference internal" href="#the-mask">The Mask</a></li>
+<li><a class="reference internal" href="#spectral-orders">Spectral Orders</a></li>
+<li><a class="reference internal" href="#vacuum-or-air-wavelengths">Vacuum or Air Wavelengths</a></li>
+<li><a class="reference internal" href="#normalization">Normalization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-and-adding-a-custom-reader">Creating and adding a custom reader</a><ul>
+<li><a class="reference internal" href="#here-are-the-basics">Here are the basics:</a></li>
+<li><a class="reference internal" href="#using-a-custom-reader">Using a custom reader</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#modules-and-useful-functions">Modules and useful functions</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="_sources/gettingstarted.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2021, David Nidever.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.0.3. &nbsp;
+    Last built 06 Jun 2021. <br/>
+  </p>
+</footer>
+  </body>
+</html>

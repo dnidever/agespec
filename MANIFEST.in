@@ -1,0 +1,4 @@
+include README.rst
+#include agespec/data/*
+
+prune build
