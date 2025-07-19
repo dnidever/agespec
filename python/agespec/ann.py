@@ -19,10 +19,10 @@ class AGEANNModel():
     
     def __init__(self,spobs=None,loggrelation=False,verbose=False):
         # Load the ANN models
-        em1 = Emulator.read(utils.datadir()+'ann_29pars_3500-4200.pkl')
-        em2 = Emulator.read(utils.datadir()+'ann_29pars_4000-5000.pkl')
-        em3 = Emulator.read(utils.datadir()+'ann_29pars_4900-6000.pkl')
-        self._models = [em1,em2,em3]
+        em1 = Emulator.read(utils.datadir()+'ann_37pars_3500-4200.pkl')
+        #em2 = Emulator.read(utils.datadir()+'ann_29pars_4000-5000.pkl')
+        #em3 = Emulator.read(utils.datadir()+'ann_29pars_4900-6000.pkl')
+        self._models = [em1]
         self.nmodels = len(self._models)
         self.labels = self._models[0].label_names
         self.nlabels = len(self.labels)
@@ -31,10 +31,10 @@ class AGEANNModel():
             for j in range(self.nlabels):
                 self._ranges[i,j,:] = [np.min(self._models[i].training_labels[:,j]),
                                        np.max(self._models[i].training_labels[:,j])]
-        self._ranges[0,0,1] = 4100.0  # use 3500-4200 model up to 4100
-        self._ranges[1,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
-        self._ranges[1,0,1] = 4950.0        
-        self._ranges[2,0,0] = 4950.0  # use 4900-6000 model from 4950
+        #self._ranges[0,0,1] = 4100.0  # use 3500-4200 model up to 4100
+        #self._ranges[1,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
+        #self._ranges[1,0,1] = 4950.0        
+        #self._ranges[2,0,0] = 4950.0  # use 4900-6000 model from 4950
         self.ranges = np.zeros((self.nlabels,2),float)
         self.ranges[0,0] = np.min(self._ranges[:,0,:])
         self.ranges[0,1] = np.max(self._ranges[:,0,:])        
@@ -52,8 +52,8 @@ class AGEANNModel():
         self._spobs = spobs
         
         # ANN model wavelengths
-        npix_syn = 22001
-        self._wsyn = np.arange(npix_syn)*0.5+9000
+        npix_syn = 550001
+        self._wsyn = np.arange(npix_syn)*0.01+3500
 
         # Get logg label
         loggind, = np.where(np.char.array(self.labels).lower()=='logg')

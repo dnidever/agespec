@@ -16,6 +16,7 @@ dependencies = [
   "thedoppler",
   "torch",
   "theborg",
+  "gdown",
 ]
 requires-python = ">=3.8"
 authors = [

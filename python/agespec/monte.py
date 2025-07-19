@@ -20,10 +20,10 @@ class AGESyn():
     
     def __init__(self,spobs=None,loggrelation=False,fluxed=False,verbose=False):
         # Load the ANN models
-        em1 = Emulator.read(utils.datadir()+'ann_29pars_3500-4200.pkl')
-        em2 = Emulator.read(utils.datadir()+'ann_29pars_4000-5000.pkl')
-        em3 = Emulator.read(utils.datadir()+'ann_29pars_4900-6000.pkl')
-        self._models = [em1,em2,em3]
+        em1 = Emulator.read(utils.datadir()+'ann_37pars_4000-5000.pkl')
+        #em2 = Emulator.read(utils.datadir()+'ann_29pars_4000-5000.pkl')
+        #em3 = Emulator.read(utils.datadir()+'ann_29pars_4900-6000.pkl')
+        self._models = [em1]
         self.nmodels = len(self._models)
         self.labels = self._models[0].label_names
         self.nlabels = len(self.labels)
@@ -32,10 +32,10 @@ class AGESyn():
             for j in range(self.nlabels):
                 self._ranges[i,j,:] = [np.min(self._models[i].training_labels[:,j]),
                                        np.max(self._models[i].training_labels[:,j])]
-        self._ranges[0,0,1] = 4100.0  # use 3500-4200 model up to 4100
-        self._ranges[1,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
-        self._ranges[1,0,1] = 4950.0        
-        self._ranges[2,0,0] = 4950.0  # use 4900-6000 model from 4950
+        #self._ranges[0,0,1] = 4100.0  # use 3500-4200 model up to 4100
+        #self._ranges[1,0,0] = 4100.0  # use 4000-5000 model from 4100 to 4950
+        #self._ranges[1,0,1] = 4950.0        
+        #self._ranges[2,0,0] = 4950.0  # use 4900-6000 model from 4950
         self.ranges = np.zeros((self.nlabels,2),float)
         self.ranges[0,0] = np.min(self._ranges[:,0,:])
         self.ranges[0,1] = np.max(self._ranges[:,0,:])        
@@ -54,22 +54,21 @@ class AGESyn():
             self._spobs = spobs
         # Default observed spectrum            
         else:
-            # The AGE WFI slitless grism has a spectral range of 1.00-1.93 microns
-            # and a dispersion of about 1.1 nm/pixel, essentially independent of
-            # wavelength, yielding a 2-pixel resolving power of R = lambda / dlambda =
-            # 460 lambda / um for a point source
-            wobs_coef = np.array([11.0, 1e4])  # in Angstroms
-            # 847 observed pixels
-            npix_obs = 847
-            wobs = np.polyval(wobs_coef,np.arange(npix_obs))
+            # The AGE
+            resolution = 80_000
+            
+            npix_obs = 164_890
+            dwlog = 2.172e-6
+            w0 = np.log10(3505)
+            wobs = 10**(np.arange(npix_obs)*dwlog+w0)
             spobs = Spec1D(np.zeros(npix_obs),wave=wobs,err=np.ones(npix_obs),
-                           lsfpars=np.array([2.0/2.35]),
-                           lsftype='Gaussian',lsfxtype='pixel')        
+                           lsfpars=np.array([2.5/2.35]),
+                           lsftype='Gaussian',lsfxtype='pixel')
             self._spobs = spobs
 
         # Synthetic wavelengths
-        npix_syn = 22001
-        self._wsyn = np.arange(npix_syn)*0.5+9000
+        npix_syn = 550001
+        self._wsyn = np.arange(npix_syn)*0.01+3500
 
         # Get logg label
         loggind, = np.where(np.char.array(self.labels).lower()=='logg')
